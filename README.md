@@ -1,116 +1,226 @@
 # RAPIZZA Ltda. — Sistema de Gestión de Pedidos
 
-**Programación II — Cliente/Servidor · Universidad Libre Seccional Pereira · Facultad de Ingeniería · 2026-1**
-
-Sistema web Full Stack para la gestión operativa de RAPIZZA Ltda.: pedidos telefónicos, asignación de repartidores, control de entregas y cuentas de cobro por tardanza.
-
----
-
-## Tecnologías
-
-| Capa          | Tecnología                                              |
-| ------------- | ------------------------------------------------------- |
-| Frontend      | React 18 + Vite + TailwindCSS + Axios + React Router v6 |
-| Backend       | Node.js + Express + bcrypt + JWT                        |
-| Base de datos | MySQL 8 (7 tablas, normalización 3FN)                   |
-| Alertas       | SweetAlert2                                             |
-| Diseño UI     | Google Stitch                                           |
+**Programación II — Cliente/Servidor · Universidad Libre Seccional Pereira · 2026-1**
 
 ---
 
 ## Requisitos previos
 
-| Herramienta | Versión mínima |
-| ----------- | -------------- |
-| Node.js     | v18.x LTS      |
-| npm         | v9.x           |
-| MySQL       | v8.x           |
+Antes de empezar, asegúrate de tener instalado:
+
+- [Node.js v18 LTS](https://nodejs.org) — al instalar, marca la opción “Add to PATH”
+- [MySQL 8](https://dev.mysql.com/downloads/installer/) — guarda la contraseña que pongas durante la instalación
+- [Git](https://git-scm.com)
+
+Para verificar que todo está instalado, abre **CMD** y ejecuta:
+
+```
+node -v
+npm -v
+mysql --version
+git --version
+```
+
+Cada uno debe mostrar un número de versión. Si alguno da error, reinstálalo.
 
 ---
 
 ## Instalación paso a paso
 
-### 1. Clonar el repositorio
+> **Usa CMD (símbolo del sistema), NO PowerShell.**
+> Para abrir CMD: tecla Windows → escribe `cmd` → Enter.
 
-```bash
+---
+
+### Paso 1 — Clonar el repositorio
+
+```
 git clone https://github.com/Juan2351/Rapizza
+```
+
+Esto crea una carpeta llamada `Parcial2_ProgramacionII` en el lugar donde estés parado. Para saber dónde estás, ejecuta `cd` solo y Enter — te mostrará la ruta actual.
+
+Entra a la carpeta del proyecto:
+
+```
 cd Parcial2_ProgramacionII
 ```
 
-### 2. Crear la base de datos
+> A partir de aquí, **todos los comandos se ejecutan desde esta carpeta raíz** a menos que se indique lo contrario.
 
-Desde CMD (no PowerShell) o MySQL Workbench:
+---
 
-```bash
-mysql -u root -p < database/schema.sql
+### Paso 2 — Crear la base de datos
+
+Abre MySQL desde CMD (te pedirá tu contraseña de MySQL):
+
+```
+mysql -u root -p
 ```
 
-### 3. Generar hashes y cargar datos de prueba
+Una vez dentro, ejecuta estas líneas **una por una** (selecciona, copia y pega cada una):
 
-```bash
+```sql
+CREATE DATABASE IF NOT EXISTS rapizza_db;
+exit
+```
+
+Ahora carga las tablas:
+
+```
+mysql -u root -p rapizza_db < database/schema.sql
+```
+
+---
+
+### Paso 3 — Generar contraseñas y cargar datos de prueba
+
+Instala bcrypt temporalmente para generar los hashes:
+
+```
 cd database
 npm install bcrypt
 node generar_hashes.js
-```
-
-Copia los hashes generados en `database/seeds.sql` reemplazando los valores del campo `password`. Luego carga los seeds:
-
-```bash
-mysql -u root -p rapizza_db < seeds.sql
 cd ..
 ```
 
-### 4. Configurar el Backend
+Verás una lista de líneas como esta:
 
-```bash
+```
+('admin', '$2b$10$...hash...', 'admin'),
+('despachador1', '$2b$10$...hash...', 'despachador'),
+...
+```
+
+Abre el archivo `database/seeds.sql` con cualquier editor de texto (Bloc de notas, VS Code, etc.), reemplaza **todos** los valores del campo `password` con los hashes que se generaron, guarda el archivo y luego ejecuta:
+
+```
+mysql -u root -p rapizza_db < database/seeds.sql
+```
+
+---
+
+### Paso 4 — Configurar el Backend
+
+```
 cd backend
-cp .env.example .env
+copy .env.example .env
 ```
 
-Edita el `.env` con tus credenciales:
+Abre el archivo `backend/.env` con el Bloc de notas y edita estas dos líneas con tus datos reales:
 
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=tu_password_de_mysql
-DB_NAME=rapizza_db
-JWT_SECRET=un_secreto_largo_y_seguro_aqui
-PORT=3001
+```
+DB_PASSWORD=la_contraseña_que_pusiste_al_instalar_mysql
+JWT_SECRET=rapizza2026secreto
 ```
 
-Instala dependencias y arranca:
+Guarda el archivo. Luego instala las dependencias y arranca el servidor:
 
-```bash
+```
 npm install
 npm run dev
 ```
 
-Debes ver:
+Debes ver esto en la pantalla:
 
 ```
 Backend corriendo en http://localhost:3001
 Conexión a MySQL exitosa
 ```
 
-### 5. Configurar el Frontend
+> **Deja esta ventana de CMD abierta.** Si la cierras, el backend se apaga.
 
-Abre una **segunda terminal**:
+---
 
-```bash
+### Paso 5 — Configurar el Frontend
+
+Abre una **segunda ventana de CMD** (Windows → `cmd` → Enter) y navega al proyecto:
+
+```
+cd Parcial2_ProgramacionII
 cd frontend
 npm install
 npm run dev
 ```
 
-Debes ver:
+Debes ver esto:
 
 ```
 VITE v5.x  ready
 ➜  Local: http://localhost:5173
 ```
 
-Abre el navegador en **http://localhost:5173**
+> **Deja esta ventana abierta también.**
+
+---
+
+### Paso 6 — Abrir la aplicación
+
+Abre tu navegador (Chrome recomendado) y ve a:
+
+```
+http://localhost:5173
+```
+
+Debes ver la pantalla de login de RAPIZZA.
+
+---
+
+## Usuarios de prueba
+
+Todos tienen la misma contraseña que usaste en `generar_hashes.js`.
+
+| Usuario      | Rol                          |
+| ------------ | ---------------------------- |
+| admin        | Administrador (acceso total) |
+| despachador1 | Despachador                  |
+| chef1        | Chef                         |
+| chef2        | Chef                         |
+| chef3        | Chef                         |
+| rep1 al rep7 | Repartidor                   |
+
+---
+
+## Cómo volver a ejecutar el proyecto (días siguientes)
+
+No necesitas repetir todos los pasos. Solo:
+
+**Terminal 1 — Backend:**
+
+```
+cd Parcial2_ProgramacionII
+cd backend
+npm run dev
+```
+
+**Terminal 2 — Frontend:**
+
+```
+cd Parcial2_ProgramacionII
+cd frontend
+npm run dev
+```
+
+Luego abre `http://localhost:5173` en el navegador.
+
+---
+
+## Solución a problemas comunes
+
+**“mysql no se reconoce como comando”**
+→ MySQL no está en el PATH. Reinstala MySQL y marca la opción “Add to PATH”, o usa MySQL Workbench para ejecutar los scripts SQL.
+
+**“Cannot find module bcrypt”**
+→ Ejecuta `npm install bcrypt` dentro de la carpeta `database/`.
+
+**“Error: connect ECONNREFUSED”**
+→ El backend no puede conectar con MySQL. Verifica que MySQL esté corriendo y que la contraseña en `.env` sea correcta.
+
+**“Port 3001 is already in use”**
+→ Ya hay un servidor corriendo. Cierra la otra ventana de CMD o reinicia el computador.
+
+**La página carga pero no puedo hacer login**
+→ Verifica que el backend esté corriendo (Terminal 1) y que hayas cargado los seeds correctamente.
 
 ---
 
@@ -118,107 +228,28 @@ Abre el navegador en **http://localhost:5173**
 
 ```
 Parcial2_ProgramacionII/
-├── frontend/
-│   └── src/
-│       ├── components/
-│       │   ├── Navbar.jsx              ← Barra de navegación reutilizable
-│       │   ├── PrivateRoute.jsx        ← Protección de rutas por rol
-│       │   ├── dashboard/
-│       │   │   ├── StatCard.jsx        ← Tarjeta de estadística
-│       │   │   └── ModuloCard.jsx      ← Botón de módulo
-│       │   └── pedidos/
-│       │       ├── TablaPedidos.jsx    ← Tabla de pedidos con acciones
-│       │       └── ModalNuevoPedido.jsx← Formulario de creación
-│       ├── context/
-│       │   └── AuthContext.jsx         ← Estado global de sesión
-│       ├── pages/
-│       │   ├── Login.jsx
-│       │   ├── Dashboard.jsx
-│       │   ├── Pedidos.jsx
-│       │   ├── Clientes.jsx
-│       │   ├── Productos.jsx
-│       │   ├── Empleados.jsx
-│       │   └── CuentasCobro.jsx
-│       └── services/
-│           ├── api.js                  ← Instancia Axios con interceptor JWT
-│           ├── authService.js
-│           └── rapizzaService.js       ← Servicios por módulo
-├── backend/
-│   ├── config/db.js                    ← Pool de conexiones MySQL
-│   ├── controllers/
-│   │   ├── authController.js           ← Register, login, me
-│   │   ├── pedidoController.js         ← Lógica de negocio central
-│   │   └── rapizzaController.js        ← Clientes, productos, empleados, cuentas
-│   ├── middleware/
-│   │   ├── verifyToken.js              ← Validación de JWT
-│   │   └── checkRole.js               ← Control de acceso por rol
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── pedidoRoutes.js
-│   │   └── rapizzaRoutes.js
-│   ├── .env.example
-│   └── server.js
+├── frontend/          ← React + Vite + TailwindCSS
+├── backend/           ← Node.js + Express + JWT
 ├── database/
-│   ├── schema.sql                      ← Creación de las 7 tablas
-│   ├── seeds.sql                       ← Datos de prueba (1 despachador, 3 chefs, 7 repartidores)
-│   ├── generar_hashes.js              ← Generador de hashes bcrypt
-│   └── er_diagram.png                 ← Diagrama Entidad-Relación
+│   ├── schema.sql     ← Crear las tablas (ejecutar primero)
+│   ├── seeds.sql      ← Datos de prueba (ejecutar segundo)
+│   └── generar_hashes.js ← Generador de contraseñas
 ├── docs/
-│   ├── arquitectura.pdf               ← Documentación de arquitectura
-│   └── manual_usuario.pdf             ← Manual de uso
+│   ├── arquitectura.pdf / .md
+│   └── manual_usuario.pdf / .md
 └── README.md
 ```
 
 ---
 
-## Usuarios de prueba
+## Integrantes del grupo
 
-| Usuario      | Contraseña | Rol         |
-| ------------ | ---------- | ----------- |
-| admin        | password   | admin       |
-| despachador1 | password   | despachador |
-| chef1        | password   | chef        |
-| chef2        | password   | chef        |
-| chef3        | password   | chef        |
-| rep1         | password   | repartidor  |
-| rep2         | password   | repartidor  |
-| rep3         | password   | repartidor  |
-| rep4         | password   | repartidor  |
-| rep5         | password   | repartidor  |
-| rep6         | password   | repartidor  |
-| rep7         | password   | repartidor  |
-
-> ⚠️ Regenera los hashes antes de la sustentación con `node database/generar_hashes.js`
+| Nombre | Responsabilidad |
+| ------ | --------------- |
+|        | Frontend        |
+|        | Backend         |
+|        | Base de datos   |
 
 ---
 
-## Endpoints principales de la API
-
-| Método | Endpoint                            | Descripción            | Rol requerido |
-| ------ | ----------------------------------- | ---------------------- | ------------- |
-| POST   | /api/auth/login                     | Iniciar sesión         | Público       |
-| POST   | /api/auth/register                  | Registrar usuario      | Público       |
-| GET    | /api/auth/me                        | Verificar sesión       | JWT           |
-| GET    | /api/pedidos                        | Listar pedidos         | JWT           |
-| POST   | /api/pedidos                        | Crear pedido           | despachador   |
-| PUT    | /api/pedidos/:id/asignar-repartidor | Asignar repartidor     | despachador   |
-| PUT    | /api/pedidos/:id/entregar           | Registrar entrega      | repartidor    |
-| DELETE | /api/pedidos/:id                    | Eliminar pedido        | admin         |
-| GET    | /api/pedidos/estadisticas           | Estadísticas dashboard | despachador   |
-| GET    | /api/clientes                       | Listar clientes        | JWT           |
-| POST   | /api/clientes                       | Crear cliente          | despachador   |
-| GET    | /api/productos                      | Listar productos       | JWT           |
-| POST   | /api/productos                      | Crear producto         | admin         |
-| GET    | /api/empleados                      | Listar empleados       | JWT           |
-| GET    | /api/cuentas-cobro                  | Ver cuentas tardías    | despachador   |
-
----
-
-## Lógica de negocio clave
-
-- Si la entrega supera los **30 minutos** desde `hora_salida`, el sistema cambia el estado a `cuenta_cobro` y genera automáticamente una cuenta de cobro al repartidor responsable
-- Si llega a tiempo → estado `pagado`
-- El **despachador** crea pedidos y asigna repartidores
-- El **repartidor** solo registra la hora de entrega
-- El **chef** tiene acceso de solo lectura
-- El **admin** tiene acceso completo a todos los módulos
+_Universidad Libre Seccional Pereira · Facultad de Ingeniería · Programación II 2026-1_
