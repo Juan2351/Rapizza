@@ -242,14 +242,4 @@ Parcial2_ProgramacionII/
 
 ---
 
-## Integrantes del grupo
-
-| Nombre | Responsabilidad |
-| ------ | --------------- |
-|        | Frontend        |
-|        | Backend         |
-|        | Base de datos   |
-
----
-
 _Universidad Libre Seccional Pereira · Facultad de Ingeniería · Programación II 2026-1_
