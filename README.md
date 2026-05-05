@@ -33,7 +33,7 @@ Sistema web Full Stack para la gestión operativa de RAPIZZA Ltda.: pedidos tele
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/Juan2351/Rapizza
 cd Parcial2_ProgramacionII
 ```
 
@@ -173,20 +173,20 @@ Parcial2_ProgramacionII/
 
 ## Usuarios de prueba
 
-| Usuario      | Contraseña   | Rol         |
-| ------------ | ------------ | ----------- |
-| admin        | Rapizza2026! | admin       |
-| despachador1 | Rapizza2026! | despachador |
-| chef1        | Rapizza2026! | chef        |
-| chef2        | Rapizza2026! | chef        |
-| chef3        | Rapizza2026! | chef        |
-| rep1         | Rapizza2026! | repartidor  |
-| rep2         | Rapizza2026! | repartidor  |
-| rep3         | Rapizza2026! | repartidor  |
-| rep4         | Rapizza2026! | repartidor  |
-| rep5         | Rapizza2026! | repartidor  |
-| rep6         | Rapizza2026! | repartidor  |
-| rep7         | Rapizza2026! | repartidor  |
+| Usuario      | Contraseña | Rol         |
+| ------------ | ---------- | ----------- |
+| admin        | password   | admin       |
+| despachador1 | password   | despachador |
+| chef1        | password   | chef        |
+| chef2        | password   | chef        |
+| chef3        | password   | chef        |
+| rep1         | password   | repartidor  |
+| rep2         | password   | repartidor  |
+| rep3         | password   | repartidor  |
+| rep4         | password   | repartidor  |
+| rep5         | password   | repartidor  |
+| rep6         | password   | repartidor  |
+| rep7         | password   | repartidor  |
 
 > ⚠️ Regenera los hashes antes de la sustentación con `node database/generar_hashes.js`
 
@@ -222,5 +222,3 @@ Parcial2_ProgramacionII/
 - El **repartidor** solo registra la hora de entrega
 - El **chef** tiene acceso de solo lectura
 - El **admin** tiene acceso completo a todos los módulos
-
----
